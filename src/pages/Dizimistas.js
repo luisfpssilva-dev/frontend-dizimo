@@ -11,8 +11,14 @@ const Dizimistas = () => {
 
   useEffect(() => {
     fetchClients();
+    
   }, []);
-
+  useEffect(() => {
+    if (editingClient) {
+      setOpen(true);
+    }
+  }, [editingClient]);
+  
   const fetchClients = async () => {
     const response = await axios.get('http://localhost:8080/titular');
     setClients(response.data);
@@ -25,6 +31,7 @@ const Dizimistas = () => {
   };
 
   const updateClient = async (titular_id, updatedClient) => {
+    console.log("updatedClient",updatedClient)
     const response = await axios.put(`http://localhost:8080/titular/${titular_id}`, updatedClient);
     setClients(clients.map(client => client.titular_id === titular_id ? response.data : client));
     setEditingClient(null);

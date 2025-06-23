@@ -6,7 +6,7 @@ import { useAuth } from '../../Auth/AuthContext';
 
 const DizimistaForm = ({ addDizimista, editingDizimista, updateDizimista, handleClose }) => {
   const [dizimista, setDizimista] = useState({ 
-    nome: '', email: '', telefone: '', cpf:'', data_nascimento:'', sexo:'', numero_dizimista:'', comunidade_id: '', dependentes: []
+    name: '', email: '', telefone: '', cpf:'', data_nascimento:'', sexo:'', numero_dizimista:'', comunidade_id: '', dependentes: []
   });
   const [comunidades, setComunidades] = useState([]);
   const [newDependente, setNewDependente] = useState({ name: '', sexo: '', tipo_dependente: '', titular_id: '', user_id: '' });
@@ -59,7 +59,7 @@ const DizimistaForm = ({ addDizimista, editingDizimista, updateDizimista, handle
     } else {
       addDizimista(dizimistaComUserId);
     }
-    setDizimista({ nome: '', email: '', telefone: '', cpf:'', data_nascimento:'', sexo:'', numero_dizimista:'', comunidade_id: '', dependentes: [] });
+    setDizimista({ name: '', email: '', telefone: '', cpf:'', data_nascimento:'', sexo:'', numero_dizimista:'', comunidade_id: '', dependentes: [] });
     handleClose();
   };
 
@@ -98,8 +98,8 @@ const DizimistaForm = ({ addDizimista, editingDizimista, updateDizimista, handle
           <Box>
             <TextField
               label="Nome"
-              name="nome"
-              value={dizimista.nome}
+              name="name"
+              value={dizimista.name}
               onChange={handleChange}
               fullWidth
               margin="normal"

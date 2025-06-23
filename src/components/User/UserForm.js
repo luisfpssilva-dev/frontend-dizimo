@@ -2,19 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { TextField, Box, Button } from '@mui/material';
 
 const UserForm = ({ addUser, editingUser, updateUser, handleClose }) => {
-  const [user, setuser] = useState({ nome: '', email: '', telefone: '', username: '' });
+  const [user, setuser] = useState({ name: '', email: '', telefone: '', username: '' });
 
   useEffect(() => {
     if (editingUser) {
       setuser(editingUser);
     } else {
-      setuser({ nome: '', email: '', telefone: '', username: ''  });
+      setuser({ name: '', email: '', telefone: '', username: ''  });
     }
   }, [editingUser]);
 
   const handleChange = (e) => {
-    const { nome, value } = e.target;
-    setuser({ ...user, [nome]: value });
+    const { name, value } = e.target;
+    setuser({ ...user, [name]: value });
   };
 
   const handleSubmit = (e) => {
@@ -24,7 +24,7 @@ const UserForm = ({ addUser, editingUser, updateUser, handleClose }) => {
     } else {
       addUser(user);
     }
-    setuser({ nome: '', email: '', telefone: '', username: ''  });
+    setuser({ name: '', email: '', telefone: '', username: ''  });
     handleClose();
   };
 
@@ -33,7 +33,7 @@ const UserForm = ({ addUser, editingUser, updateUser, handleClose }) => {
       <TextField
         label="Nome"
         name="nome"
-        value={user.nome}
+        value={user.name}
         onChange={handleChange}
         fullWidth
         margin="normal"
