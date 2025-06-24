@@ -8,6 +8,7 @@ const DizimistaForm = ({ addDizimista, editingDizimista, updateDizimista, handle
   const [dizimista, setDizimista] = useState({ 
     name: '', email: '', telefone: '', cpf:'', data_nascimento:'', sexo:'', numero_dizimista:'', comunidade_id: '', dependentes: []
   });
+  const [comunidadeError, setComunidadeError] = useState(false);
   const [comunidades, setComunidades] = useState([]);
   const [newDependente, setNewDependente] = useState({ name: '', sexo: '', tipo_dependente: '', titular_id: '', user_id: '' });
   const [prestacoes, setPrestacoes] = useState([]); // Estado para as prestações
@@ -53,12 +54,24 @@ const DizimistaForm = ({ addDizimista, editingDizimista, updateDizimista, handle
 
   const handleSubmit = (e) => {
     e.preventDefault();
+  
+    // Validar comunidade
+    if (!dizimista.comunidade_id || dizimista.comunidade_id === '') {
+      setComunidadeError(true);
+      return; // NÃO envia
+    } else {
+      setComunidadeError(false);
+    }
+  
     const dizimistaComUserId = { ...dizimista, user_id };
+  
     if (editingDizimista) {
       updateDizimista(editingDizimista.titular_id, dizimistaComUserId);
     } else {
       addDizimista(dizimistaComUserId);
     }
+  
+    // Só limpa e fecha se a comunidade estiver válida
     setDizimista({ name: '', email: '', telefone: '', cpf:'', data_nascimento:'', sexo:'', numero_dizimista:'', comunidade_id: '', dependentes: [] });
     handleClose();
   };
@@ -156,14 +169,16 @@ const DizimistaForm = ({ addDizimista, editingDizimista, updateDizimista, handle
               required
             />
             <TextField
-              select
-              label="Comunidade"
-              name="comunidade_id"
-              value={dizimista.comunidade_id}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-              required
+                select
+                label="Comunidade"
+                name="comunidade_id"
+                value={dizimista.comunidade_id}
+                onChange={handleChange}
+                fullWidth
+                margin="normal"
+                required
+                error={comunidadeError}
+                helperText={comunidadeError ? "Por favor, selecione uma comunidade." : ""}
             >
               {comunidades.map((comunidade) => (
                 <MenuItem key={comunidade.comunidade_id} value={comunidade.comunidade_id}>
@@ -171,9 +186,16 @@ const DizimistaForm = ({ addDizimista, editingDizimista, updateDizimista, handle
                 </MenuItem>
               ))}
             </TextField>
-            <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
-              {editingDizimista ? 'Update' : 'Salvar'}
-            </Button>
+            <Button 
+  type="submit" 
+  variant="contained" 
+  color="primary" 
+  sx={{ mt: 2 }} 
+  // AQUI ESTÁ A MÁGICA
+  disabled={!dizimista.comunidade_id}
+>
+  {editingDizimista ? 'Salvar' : 'Salvar'}
+</Button>
           </Box>
         )}
 

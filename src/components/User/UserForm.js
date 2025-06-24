@@ -68,7 +68,7 @@ const UserForm = ({ addUser, editingUser, updateUser, handleClose }) => {
         required
       />
       <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
-        {editingUser ? 'Update' : 'Salvar'}
+        {editingUser ? 'Atualizar' : 'Salvar'}
       </Button>
     </Box>
   );
