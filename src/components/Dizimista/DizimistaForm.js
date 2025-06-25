@@ -10,6 +10,7 @@ const DizimistaForm = ({ addDizimista, editingDizimista, updateDizimista, handle
   });
   const [comunidadeError, setComunidadeError] = useState(false);
   const [comunidades, setComunidades] = useState([]);
+  const [dependentes, setDependentes] = useState([]);
   const [newDependente, setNewDependente] = useState({ name: '', sexo: '', tipo_dependente: '', titular_id: '', user_id: '' });
   const [prestacoes, setPrestacoes] = useState([]); // Estado para as prestações
   const [activeTab, setActiveTab] = useState(0);
@@ -32,11 +33,27 @@ const DizimistaForm = ({ addDizimista, editingDizimista, updateDizimista, handle
       } catch (error) {
         console.error('Erro ao buscar prestações:', error);
       }
+      
     };
+    const fetchDependentes = async (titular_id) => {
+      try {
+        const response = await axios.get(`http://localhost:8080/dependente/${titular_id}`);
+        setDependentes(response.data);
+      } catch (error) {
+        console.error('Erro ao buscar dependentes:', error);
+      }
+      
+    };
+    fetchDependentes(editingDizimista.titular_id)
 
     fetchComunidades();
     if (editingDizimista) {
-      setDizimista(editingDizimista);
+      setDizimista(currentState => ({
+        ...currentState, // Pega o estado atual (com dependentes: [])
+        ...editingDizimista, // Sobrescreve com os dados do dizimista a ser editado
+        // Garante que 'dependentes' seja um array, mesmo que não venha em 'editingDizimista'
+        dependentes: editingDizimista.dependentes || [], 
+      }));
       setNewDependente((prev) => ({ ...prev, titular_id: editingDizimista.titular_id, user_id }));
       fetchPrestacoes(editingDizimista.titular_id); // Busca prestações do titular
     }
@@ -77,9 +94,13 @@ const DizimistaForm = ({ addDizimista, editingDizimista, updateDizimista, handle
   };
 
   const handleAddDependente = async (e) => {
+    console.log("Disparou o submit do dependente");
+
     e.preventDefault();
+    console.log("user_id no momento do envio:", user_id);
     try {
       const response = await axios.post('http://localhost:8080/dependente', newDependente);
+      console.log("response", response)
       setDizimista((prev) => ({
         ...prev,
         dependentes: [...prev.dependentes, response.data]
@@ -191,7 +212,6 @@ const DizimistaForm = ({ addDizimista, editingDizimista, updateDizimista, handle
   variant="contained" 
   color="primary" 
   sx={{ mt: 2 }} 
-  // AQUI ESTÁ A MÁGICA
   disabled={!dizimista.comunidade_id}
 >
   {editingDizimista ? 'Salvar' : 'Salvar'}
@@ -202,10 +222,10 @@ const DizimistaForm = ({ addDizimista, editingDizimista, updateDizimista, handle
         {activeTab === 1 && (
           <Box>
             <Typography variant="h6" gutterBottom>Dependentes</Typography>
-            {dizimista.dependentes && dizimista.dependentes.length > 0 ? (
+            {dependentes && dependentes.length > 0 ? (
               // eslint-disable-next-line react/jsx-no-undef
               <List>
-                {dizimista.dependentes.map((dependente) => (
+                {dependentes.map((dependente) => (
                   // eslint-disable-next-line react/jsx-no-undef
                   <ListItem key={dependente.dependente_id}>
                     <ListItemText
@@ -248,7 +268,7 @@ const DizimistaForm = ({ addDizimista, editingDizimista, updateDizimista, handle
                 margin="normal"
                 required
               />
-              <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
+              <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }} onClick={handleAddDependente}>
                 Adicionar Dependente
               </Button>
             </Box>

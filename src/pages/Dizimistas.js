@@ -22,6 +22,7 @@ const Dizimistas = () => {
   const fetchClients = async () => {
     const response = await axios.get('http://localhost:8080/titular');
     setClients(response.data);
+    console.log("clients", response.data)
   };
 
   const addClient = async (client) => {
