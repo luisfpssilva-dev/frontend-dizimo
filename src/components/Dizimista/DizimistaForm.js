@@ -44,10 +44,11 @@ const DizimistaForm = ({ addDizimista, editingDizimista, updateDizimista, handle
       }
       
     };
-    fetchDependentes(editingDizimista.titular_id)
+    
 
     fetchComunidades();
-    if (editingDizimista) {
+    if (editingDizimista && editingDizimista.titular_id) {
+      fetchDependentes(editingDizimista.titular_id)
       setDizimista(currentState => ({
         ...currentState, // Pega o estado atual (com dependentes: [])
         ...editingDizimista, // Sobrescreve com os dados do dizimista a ser editado
