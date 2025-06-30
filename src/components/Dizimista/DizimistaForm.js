@@ -6,7 +6,7 @@ import { useAuth } from '../../Auth/AuthContext';
 
 const DizimistaForm = ({ addDizimista, editingDizimista, updateDizimista, handleClose }) => {
   const [dizimista, setDizimista] = useState({ 
-    name: '', email: '', telefone: '', cpf:'', data_nascimento:'', sexo:'', numero_dizimista:'', comunidade_id: '', dependentes: []
+    name: '', numero_dizimista:'', email: '', telefone: '', cpf:'', data_nascimento:'', sexo:'', comunidade_id: '', dependentes: []
   });
   const [comunidadeError, setComunidadeError] = useState(false);
   const [comunidades, setComunidades] = useState([]);
@@ -90,7 +90,7 @@ const DizimistaForm = ({ addDizimista, editingDizimista, updateDizimista, handle
     }
   
     // Só limpa e fecha se a comunidade estiver válida
-    setDizimista({ name: '', email: '', telefone: '', cpf:'', data_nascimento:'', sexo:'', numero_dizimista:'', comunidade_id: '', dependentes: [] });
+    setDizimista({ name: '', numero_dizimista:'', email: '', telefone: '', cpf:'', data_nascimento:'', sexo:'', comunidade_id: '', dependentes: [] });
     handleClose();
   };
 
@@ -135,6 +135,15 @@ const DizimistaForm = ({ addDizimista, editingDizimista, updateDizimista, handle
               label="Nome"
               name="name"
               value={dizimista.name}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
+              required
+            />
+            <TextField
+              label="Número do Dizimista"
+              name="numero_dizimista"
+              value={dizimista.numero_dizimista}
               onChange={handleChange}
               fullWidth
               margin="normal"
