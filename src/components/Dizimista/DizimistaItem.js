@@ -1,6 +1,8 @@
 // DizimistaItem.js
 
 import React from 'react';
+import DizimistaGrid from './DizimistaGrid';
+
 
 const DizimistaItem = ({ client, deleteClient, setEditingClient }) => {
   return (
